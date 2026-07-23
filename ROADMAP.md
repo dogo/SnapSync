@@ -73,7 +73,7 @@ A native macOS app that locates local Marvel Snap data, generates a normalized s
 - Sanitized fixtures and an explicit V1 schema fingerprint shared by parsing and upload.
 - Lightweight private history of the latest collection or deck change, without a database.
 - Local inventory with collection level, credits, gold, tokens, and boosters.
-- Bundle promoted to `0.9.0`.
+- Bundle promoted to `1.0.0`.
 - In-app account disconnection and confirmed local data cleanup.
 
 ### ⬜ Not started
@@ -166,23 +166,23 @@ A native macOS app that locates local Marvel Snap data, generates a normalized s
 - Display inventory in the app and the `inspect` command. ✅
 - Keep inventory and history exclusively local. ✅
 
-### 1.0 — Stable collection and decks 🚧
+### 1.0 — Stable collection and decks ✅
 
 Criteria:
 
-- automatic discovery and a persistent manual fallback;
-- versioned known schemas, with uploads blocked for incompatible schemas;
-- export plus manual and automatic synchronization;
-- idempotency and offline recovery;
+- automatic discovery and a persistent manual fallback; ✅
+- versioned known schemas, with uploads blocked for incompatible schemas; ✅
+- export plus manual and automatic synchronization; ✅
+- idempotency and offline recovery; ✅
 - native sidebar interface with dedicated overview and settings screens; ✅
 - searchable local collection browser with filters, sorting, and cached artwork; ✅
-- deck browser with card contents; ✅
-- usable diagnostics;
-- signed and notarized distribution with documented privacy.
+- deck browser with card contents and per-card details; ✅
+- usable diagnostics; ✅
+- signed and notarized distribution with documented privacy. ✅
 
 ## Next step
 
-Promote the bundle to `1.0.0` and run the final signed and notarized DMG smoke test.
+Run the final signed and notarized DMG smoke test for `1.0.0`.
 
 ## Post-1.0
 
