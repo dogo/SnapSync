@@ -19,7 +19,7 @@ struct SettingsCard<Content: View>: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 12) {
             Label(title, systemImage: systemImage)
                 .font(.title2)
                 .bold()
