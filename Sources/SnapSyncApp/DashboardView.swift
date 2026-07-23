@@ -38,6 +38,8 @@ struct DashboardView: View {
                 switch selection ?? .overview {
                 case .overview:
                     OverviewView(model: model)
+                case .collection:
+                    CollectionView(model: model)
                 case .settings:
                     SettingsView(model: model)
                 }

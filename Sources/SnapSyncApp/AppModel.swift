@@ -8,6 +8,7 @@ import SnapSyncCore
 final class AppModel: ObservableObject {
     @Published private(set) var statusText = "Procurando Marvel Snap…"
     @Published private(set) var accountName = "—"
+    @Published private(set) var collection: [SnapSnapshot.OwnedCard] = []
     @Published private(set) var cardCount = 0
     @Published private(set) var variantCount = 0
     @Published private(set) var deckCount = 0
@@ -162,6 +163,7 @@ final class AppModel: ObservableObject {
             scopedURL = nil
             source = nil
             accountName = "—"
+            collection = []
             cardCount = 0
             variantCount = 0
             deckCount = 0
@@ -184,15 +186,18 @@ final class AppModel: ObservableObject {
     private func update(_ snapshot: SnapSnapshot, source: SnapSource) {
         self.source = source
         accountName = snapshot.account?.displayName ?? "Conta desconhecida"
-        cardCount = snapshot.collection.count
-        variantCount = snapshot.collection.reduce(0) { $0 + $1.variants.count }
+        collection = snapshot.collection.sorted {
+            $0.definitionID.localizedStandardCompare($1.definitionID) == .orderedAscending
+        }
+        cardCount = collection.count
+        variantCount = collection.reduce(0) { $0 + $1.variants.count }
         deckCount = snapshot.decks.count
         collectionLevel = snapshot.inventory.collectionLevel
         credits = snapshot.inventory.credits
         gold = snapshot.inventory.gold
         collectorsTokens = snapshot.inventory.collectorsTokens
         wildBoosters = snapshot.inventory.wildBoosters
-        boosterCount = snapshot.collection.compactMap(\.boosters).reduce(0, +)
+        boosterCount = collection.compactMap(\.boosters).reduce(0, +)
         do {
             lastChange = try SnapshotHistoryStore.record(snapshot)
         } catch {

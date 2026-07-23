@@ -175,14 +175,14 @@ Criteria:
 - export plus manual and automatic synchronization;
 - idempotency and offline recovery;
 - native sidebar interface with dedicated overview and settings screens; ✅
-- searchable local collection browser;
+- searchable local collection browser; ✅
 - deck browser with card contents;
 - usable diagnostics;
 - signed and notarized distribution with documented privacy.
 
 ## Next step
 
-Add the searchable collection browser using the normalized snapshot already loaded by the app.
+Add the deck browser with its card contents using the normalized snapshot already loaded by the app.
 
 ## Post-1.0
 

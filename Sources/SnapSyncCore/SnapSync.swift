@@ -271,10 +271,12 @@ public struct SnapSnapshot: Codable, Sendable, Equatable {
         public let displayName: String?
     }
 
-    public struct OwnedCard: Codable, Sendable, Equatable {
+    public struct OwnedCard: Codable, Sendable, Equatable, Identifiable {
         public let definitionID: String
         public let variants: [Variant]
         public let boosters: Int?
+
+        public var id: String { definitionID }
     }
 
     public struct Variant: Codable, Sendable, Equatable {
