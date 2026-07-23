@@ -28,7 +28,7 @@ public enum CollectionQuery {
         let ownedByID = Dictionary(uniqueKeysWithValues: owned.map { ($0.id, $0) })
         let catalogIDs = Set(catalog.map(\.id))
         return (
-            catalog.map { CollectionCard(id: $0.id, name: $0.name, ownedCard: ownedByID[$0.id]) }
+            catalog.map { CollectionCard(id: $0.id, name: $0.name, ownedCard: ownedByID[$0.id], cost: $0.cost, power: $0.power, text: $0.text) }
             + owned.filter { catalogIDs.contains($0.id) == false }.map {
                 CollectionCard(id: $0.id, name: displayName(for: $0.id), ownedCard: $0)
             }

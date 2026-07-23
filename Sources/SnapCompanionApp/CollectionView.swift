@@ -8,6 +8,7 @@ struct CollectionView: View {
     @State private var sort: CollectionSort = .nameAscending
     @State private var catalog: [CardCatalogEntry] = []
     @State private var catalogUnavailable = false
+    @State private var selectedCard: CollectionCard?
     private let columns = [GridItem(.adaptive(minimum: 200))]
 
     var body: some View {
@@ -51,7 +52,12 @@ struct CollectionView: View {
                 } else {
                     LazyVGrid(columns: columns) {
                         ForEach(cards) { card in
-                            CollectionCardView(card: card)
+                            Button {
+                                selectedCard = card
+                            } label: {
+                                CollectionCardView(card: card)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                 }
@@ -68,6 +74,9 @@ struct CollectionView: View {
         }
         .navigationTitle(Text(.sectionCollection))
         .searchable(text: $searchText, prompt: Text(.searchCard))
+        .sheet(item: $selectedCard) { card in
+            CardDetailView(card: card)
+        }
         .task { await loadCatalog() }
     }
 

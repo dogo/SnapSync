@@ -41,7 +41,13 @@ public actor CardCatalog {
             for card in remote where card.collectible == "1" && card.source?.isEmpty == false && card.source != "None" {
                 guard let id = card.id, id.isEmpty == false,
                       let name = card.name, name.isEmpty == false else { continue }
-                entriesByID[id] = CardCatalogEntry(id: id, name: name)
+                entriesByID[id] = CardCatalogEntry(
+                    id: id,
+                    name: name,
+                    cost: card.cost.flatMap { Int($0) },
+                    power: card.power.flatMap { Int($0) },
+                    text: card.description.map(Self.plainText).flatMap { $0.isEmpty ? nil : $0 }
+                )
             }
             let entries = entriesByID.values.sorted {
                 $0.name.localizedStandardCompare($1.name) == .orderedAscending
@@ -93,10 +99,17 @@ public actor CardCatalog {
         let entries: [CardCatalogEntry]
     }
 
+    private static func plainText(_ html: String) -> String {
+        html.replacing(/<[^>]+>/, with: "").trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     private struct RemoteCard: Decodable {
         let id: String?
         let name: String?
         let collectible: String?
         let source: String?
+        let cost: String?
+        let power: String?
+        let description: String?
     }
 }
