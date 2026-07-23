@@ -5,12 +5,22 @@ struct AccountConnectionView: View {
     @State private var confirmsDisconnect = false
 
     var body: some View {
-        GroupBox("MarvelSnap.pro") {
+        SettingsCard(title: "MarvelSnap.pro", systemImage: "link.circle.fill", tint: .purple) {
             HStack {
-                Label(
-                    model.isLinked ? "Conta vinculada" : "Conta não vinculada",
-                    systemImage: model.isLinked ? "checkmark.circle" : "link"
-                )
+                VStack(alignment: .leading) {
+                    Label(
+                        model.isLinked ? "Conta vinculada" : "Conta não vinculada",
+                        systemImage: model.isLinked ? "checkmark.seal.fill" : "person.crop.circle.badge.questionmark"
+                    )
+                    .font(.headline)
+
+                    Text(
+                        model.isLinked
+                            ? "Coleção e decks podem ser sincronizados com segurança."
+                            : "Vincule sua conta para começar a sincronizar."
+                    )
+                    .foregroundStyle(.secondary)
+                }
 
                 Spacer()
 
@@ -33,7 +43,9 @@ struct AccountConnectionView: View {
                             Text("O token será removido do Keychain. Os dados locais serão mantidos.")
                         }
                 } else {
-                    Button("Conectar conta", action: connect)
+                    Button("Conectar conta", systemImage: "link", action: connect)
+                        .buttonStyle(.borderedProminent)
+                        .tint(.purple)
                         .disabled(model.canConnect == false || model.isConnecting || model.isSyncing)
                 }
             }

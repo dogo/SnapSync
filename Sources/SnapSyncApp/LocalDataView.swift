@@ -5,11 +5,17 @@ struct LocalDataView: View {
     @State private var confirmsClear = false
 
     var body: some View {
-        GroupBox("Dados locais") {
+        SettingsCard(title: "Dados locais", systemImage: "externaldrive.fill.badge.xmark", tint: .red) {
             HStack {
-                Text("Remove pasta salva, histórico, checkpoint e outbox. O token será mantido.")
-                    .foregroundStyle(.secondary)
+                VStack(alignment: .leading) {
+                    Text("Começar do zero")
+                        .font(.headline)
+                    Text("Remove pasta salva, histórico, checkpoint e outbox. O token será mantido.")
+                        .foregroundStyle(.secondary)
+                }
+
                 Spacer()
+
                 Button("Limpar dados locais", role: .destructive, action: requestClear)
                     .disabled(model.isConnecting || model.isSyncing)
                     .confirmationDialog(

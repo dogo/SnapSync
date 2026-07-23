@@ -174,12 +174,15 @@ Criteria:
 - versioned known schemas, with uploads blocked for incompatible schemas;
 - export plus manual and automatic synchronization;
 - idempotency and offline recovery;
-- usable macOS interface and diagnostics;
+- native sidebar interface with dedicated overview and settings screens; ✅
+- searchable local collection browser;
+- deck browser with card contents;
+- usable diagnostics;
 - signed and notarized distribution with documented privacy.
 
 ## Next step
 
-Promote the bundle to `1.0.0` and run the final DMG smoke test.
+Add the searchable collection browser using the normalized snapshot already loaded by the app.
 
 ## Post-1.0
 
