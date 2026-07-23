@@ -483,63 +483,118 @@ struct SnapSyncTests {
 
     @Test func collectionQueryMatchesNamesWithSpaces() {
         let results = CollectionQuery.results(
-            in: collectionCards,
+            in: queryCards,
             searchText: "ant man",
             filter: .all,
             sort: .nameAscending
         )
 
-        #expect(results.map(\.definitionID) == ["AntMan"])
+        #expect(results.map(\.id) == ["AntMan"])
     }
 
     @Test func collectionQueryFiltersVariantsAndBoosters() {
         let variants = CollectionQuery.results(
-            in: collectionCards,
+            in: queryCards,
             searchText: "",
             filter: .withVariants,
             sort: .nameAscending
         )
         let withoutBoosters = CollectionQuery.results(
-            in: collectionCards,
+            in: queryCards,
             searchText: "",
             filter: .withoutBoosters,
             sort: .nameAscending
         )
         let withBoosters = CollectionQuery.results(
-            in: collectionCards,
+            in: queryCards,
             searchText: "",
             filter: .withBoosters,
             sort: .nameAscending
         )
 
-        #expect(variants.map(\.definitionID) == ["AntMan", "BlueMarvel"])
-        #expect(withBoosters.map(\.definitionID) == ["AntMan", "BlueMarvel"])
-        #expect(withoutBoosters.map(\.definitionID) == ["Hulk"])
+        #expect(variants.map(\.id) == ["AntMan", "BlueMarvel"])
+        #expect(withBoosters.map(\.id) == ["AntMan", "BlueMarvel"])
+        #expect(withoutBoosters.map(\.id) == ["Hulk"])
     }
 
     @Test func collectionQuerySortsByVariantsAndBoosters() {
         let variants = CollectionQuery.results(
-            in: collectionCards,
+            in: queryCards,
             searchText: "",
             filter: .all,
             sort: .mostVariants
         )
         let boosters = CollectionQuery.results(
-            in: collectionCards,
+            in: queryCards,
             searchText: "",
             filter: .all,
             sort: .mostBoosters
         )
         let namesDescending = CollectionQuery.results(
-            in: collectionCards,
+            in: queryCards,
             searchText: "",
             filter: .all,
             sort: .nameDescending
         )
 
-        #expect(variants.map(\.definitionID) == ["BlueMarvel", "AntMan", "Hulk"])
-        #expect(boosters.map(\.definitionID) == ["AntMan", "BlueMarvel", "Hulk"])
-        #expect(namesDescending.map(\.definitionID) == ["Hulk", "BlueMarvel", "AntMan"])
+        #expect(variants.map(\.id) == ["BlueMarvel", "AntMan", "Hulk"])
+        #expect(boosters.map(\.id) == ["AntMan", "BlueMarvel", "Hulk"])
+        #expect(namesDescending.map(\.id) == ["Hulk", "BlueMarvel", "AntMan"])
+    }
+
+    @Test func collectionQueryFiltersOwnedAndMissingCards() {
+        let cards = CollectionQuery.cards(
+            owned: collectionCards,
+            catalog: [
+                CardCatalogEntry(id: "AntMan", name: "Ant Man"),
+                CardCatalogEntry(id: "Galactus", name: "Galactus"),
+            ]
+        )
+        let owned = CollectionQuery.results(
+            in: cards,
+            searchText: "",
+            filter: .owned,
+            sort: .nameAscending
+        )
+        let missing = CollectionQuery.results(
+            in: cards,
+            searchText: "",
+            filter: .missing,
+            sort: .nameAscending
+        )
+
+        #expect(owned.map(\.id) == ["AntMan", "BlueMarvel", "Hulk"])
+        #expect(missing.map(\.id) == ["Galactus"])
+    }
+
+    @Test(.tags(.networking))
+    func cardCatalogFiltersAndCachesThePublicCatalog() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let cacheURL = directory.appendingPathComponent("catalog.json")
+        let counter = Counter()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let response = Data(#"""
+        [
+            {"id":"AntMan","name":"Ant Man","collectible":"1","source":"Recruit Season"},
+            {"id":"AdamantiumInfusion","name":"Adamantium Infusion","collectible":"1","source":"Pool 5"},
+            {"id":"Token","name":"Token","collectible":"1","source":"None"},
+            {"id":"Hulk","name":"Hulk","collectible":"0","source":"Starter Card"}
+        ]
+        """#.utf8)
+        let catalog = CardCatalog(cacheURL: cacheURL) { request in
+            await counter.increment()
+            #expect(request.url?.host == "api.dotgg.gg")
+            return response
+        }
+        let now = Date(timeIntervalSince1970: 100_000)
+
+        let fetched = try await catalog.entries(now: now)
+        let cached = try await catalog.entries(now: now.addingTimeInterval(3_600))
+        let requestCount = await counter.value
+
+        #expect(fetched.map(\.id) == ["AdamantiumInfusion", "AntMan"])
+        #expect(cached == fetched)
+        #expect(requestCount == 1)
     }
 
     @Test(.tags(.networking))
@@ -599,6 +654,10 @@ struct SnapSyncTests {
             ownedCard("BlueMarvel", variants: 3, boosters: 5),
             ownedCard("Hulk", variants: 1, boosters: nil),
         ]
+    }
+
+    private var queryCards: [CollectionCard] {
+        CollectionQuery.cards(owned: collectionCards, catalog: [])
     }
 
     private func ownedCard(_ definitionID: String, variants: Int, boosters: Int?) -> SnapSnapshot.OwnedCard {

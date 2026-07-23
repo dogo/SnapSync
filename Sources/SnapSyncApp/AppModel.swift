@@ -160,6 +160,7 @@ final class AppModel: ObservableObject {
             try SyncCheckpoint.clear()
             try SyncOutbox.remove()
             try SnapshotHistoryStore.clear()
+            try CardCatalog.clear()
             scopedURL?.stopAccessingSecurityScopedResource()
             scopedURL = nil
             source = nil

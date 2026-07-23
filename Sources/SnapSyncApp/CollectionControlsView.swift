@@ -41,6 +41,8 @@ private extension CollectionFilter {
     var title: String {
         switch self {
         case .all: "Todas"
+        case .owned: "Possuídas"
+        case .missing: "Faltantes"
         case .withVariants: "Com variantes"
         case .withBoosters: "Com boosters"
         case .withoutBoosters: "Sem boosters"
@@ -50,6 +52,8 @@ private extension CollectionFilter {
     var systemImage: String {
         switch self {
         case .all: "rectangle.stack.fill"
+        case .owned: "checkmark.circle.fill"
+        case .missing: "lock.fill"
         case .withVariants: "sparkles"
         case .withBoosters: "arrow.up.circle.fill"
         case .withoutBoosters: "minus.circle"

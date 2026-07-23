@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct CollectionHeaderView: View {
-    let cardCount: Int
+    let ownedCount: Int
+    let totalCount: Int?
     let variantCount: Int
 
     var body: some View {
@@ -21,11 +22,17 @@ struct CollectionHeaderView: View {
                     Text("Sua coleção")
                         .font(.title)
                         .bold()
-                    Text("Explore todas as cartas disponíveis neste Mac.")
+                    Text("Explore as cartas possuídas e descubra quais ainda faltam.")
                         .foregroundStyle(.white.opacity(0.85))
-                    Text("^[\(cardCount) carta](inflect: true) · ^[\(variantCount) variante](inflect: true)")
-                        .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.85))
+                    if let totalCount {
+                        Text("\(ownedCount.formatted()) possuídas de \(totalCount.formatted()) · ^[\(variantCount) variante](inflect: true)")
+                            .font(.subheadline)
+                            .foregroundStyle(.white.opacity(0.85))
+                    } else {
+                        Text("^[\(ownedCount) carta](inflect: true) · ^[\(variantCount) variante](inflect: true)")
+                            .font(.subheadline)
+                            .foregroundStyle(.white.opacity(0.85))
+                    }
                 }
 
                 Spacer()

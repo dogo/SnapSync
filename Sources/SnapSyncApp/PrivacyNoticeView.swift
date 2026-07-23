@@ -29,6 +29,12 @@ struct PrivacyNoticeView: View {
                     Text("Imagens de cartas são carregadas do CDN do MarvelSnap.pro.")
                 }
                 GridRow(alignment: .firstTextBaseline) {
+                    Image(systemName: "books.vertical.fill")
+                        .frame(width: 22)
+                        .accessibilityHidden(true)
+                    Text("O catálogo público é atualizado pelo DotGG sem dados da sua conta.")
+                }
+                GridRow(alignment: .firstTextBaseline) {
                     Image(systemName: "eye.slash.fill")
                         .frame(width: 22)
                         .accessibilityHidden(true)
