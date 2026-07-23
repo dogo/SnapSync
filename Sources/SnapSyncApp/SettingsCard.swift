@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct SettingsCard<Content: View>: View {
-    let title: String
+    let title: LocalizedStringResource
     let systemImage: String
     let tint: Color
     let content: Content
 
     init(
-        title: String,
+        title: LocalizedStringResource,
         systemImage: String,
         tint: Color,
         @ViewBuilder content: () -> Content
@@ -20,7 +20,11 @@ struct SettingsCard<Content: View>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label(title, systemImage: systemImage)
+            Label {
+                Text(title)
+            } icon: {
+                Image(systemName: systemImage)
+            }
                 .font(.title2)
                 .bold()
                 .foregroundStyle(tint)

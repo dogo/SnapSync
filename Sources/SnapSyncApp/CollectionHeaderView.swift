@@ -19,17 +19,17 @@ struct CollectionHeaderView: View {
                     .accessibilityHidden(true)
 
                 VStack(alignment: .leading) {
-                    Text("Sua coleção")
+                    Text(.collectionHeaderTitle)
                         .font(.title)
                         .bold()
-                    Text("Explore as cartas possuídas e descubra quais ainda faltam.")
+                    Text(.collectionHeaderSubtitle)
                         .foregroundStyle(.white.opacity(0.85))
                     if let totalCount {
-                        Text("\(ownedCount.formatted()) possuídas de \(totalCount.formatted()) · ^[\(variantCount) variante](inflect: true)")
+                        Text(.collectionOwnedProgress(ownedCount, totalCount, variantCount))
                             .font(.subheadline)
                             .foregroundStyle(.white.opacity(0.85))
                     } else {
-                        Text("^[\(ownedCount) carta](inflect: true) · ^[\(variantCount) variante](inflect: true)")
+                        Text(.collectionSummary(ownedCount, variantCount))
                             .font(.subheadline)
                             .foregroundStyle(.white.opacity(0.85))
                     }

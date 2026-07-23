@@ -17,6 +17,7 @@ It reads game files without modifying them. No overlay, OCR, memory inspection, 
 - Private lightweight history of the latest collection and deck changes.
 - Manual and automatic synchronization with debounce, retry, idempotency, and an offline outbox.
 - Native SwiftUI dashboard and menu bar controls.
+- English and Brazilian Portuguese localization through a String Catalog.
 - Keychain storage for the MarvelSnap.pro token.
 - In-app account disconnection and local data cleanup.
 - Sanitized diagnostics through `snapsync doctor`.
@@ -34,6 +35,12 @@ It reads game files without modifying them. No overlay, OCR, memory inspection, 
 ```bash
 swift build
 swift test
+```
+
+After editing `Localizable.xcstrings`, regenerate Swift symbols and package resources:
+
+```bash
+./scripts/update_localizations.sh
 ```
 
 Run the development app:

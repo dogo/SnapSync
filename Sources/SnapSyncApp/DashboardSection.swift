@@ -1,3 +1,5 @@
+import Foundation
+
 enum DashboardSection: String, CaseIterable, Identifiable {
     case overview
     case collection
@@ -6,12 +8,12 @@ enum DashboardSection: String, CaseIterable, Identifiable {
 
     var id: Self { self }
 
-    var title: String {
+    var title: LocalizedStringResource {
         switch self {
-        case .overview: "Visão geral"
-        case .collection: "Coleção"
-        case .decks: "Decks"
-        case .settings: "Ajustes"
+        case .overview: .sectionOverview
+        case .collection: .sectionCollection
+        case .decks: .sectionDecks
+        case .settings: .sectionSettings
         }
     }
 

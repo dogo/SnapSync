@@ -5,28 +5,30 @@ struct LocalDataView: View {
     @State private var confirmsClear = false
 
     var body: some View {
-        SettingsCard(title: "Dados locais", systemImage: "externaldrive.fill.badge.xmark", tint: .red) {
+        SettingsCard(title: .localDataTitle, systemImage: "externaldrive.fill.badge.xmark", tint: .red) {
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Começar do zero")
+                    Text(.localDataResetTitle)
                         .font(.headline)
-                    Text("Remove pasta salva, histórico, checkpoint e outbox. O token será mantido.")
+                    Text(.localDataDetail)
                         .foregroundStyle(.secondary)
                 }
 
                 Spacer()
 
-                Button("Limpar dados locais", role: .destructive, action: requestClear)
+                Button(role: .destructive, action: requestClear) {
+                    Text(.clearLocalData)
+                }
                     .disabled(model.isConnecting || model.isSyncing)
                     .confirmationDialog(
-                        "Limpar os dados locais?",
+                        String(localized: .clearLocalDataTitle),
                         isPresented: $confirmsClear,
                         titleVisibility: .visible
                     ) {
-                        Button("Limpar dados locais", role: .destructive, action: model.clearLocalData)
-                        Button("Cancelar", role: .cancel) {}
+                        Button(role: .destructive, action: model.clearLocalData) { Text(.clearLocalData) }
+                        Button(role: .cancel, action: {}) { Text(.cancel) }
                     } message: {
-                        Text("Esta ação não pode ser desfeita. O token do MarvelSnap.pro será mantido.")
+                        Text(.clearLocalDataMessage)
                     }
             }
         }

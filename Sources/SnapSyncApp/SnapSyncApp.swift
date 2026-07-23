@@ -6,12 +6,12 @@ struct SnapSyncApplication: App {
     @StateObject private var model = AppModel()
 
     var body: some Scene {
-        Window("SnapSync", id: "dashboard") {
+        Window(String(localized: .appTitle), id: "dashboard") {
             DashboardView(model: model)
                 .task { model.load() }
         }
 
-        MenuBarExtra("SnapSync", systemImage: "arrow.triangle.2.circlepath") {
+        MenuBarExtra(String(localized: .appTitle), systemImage: "arrow.triangle.2.circlepath") {
             MenuBarContentView(model: model)
         }
     }

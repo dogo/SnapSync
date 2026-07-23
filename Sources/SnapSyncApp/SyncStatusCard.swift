@@ -26,10 +26,11 @@ struct SyncStatusCard: View {
                     Text(model.accountName)
                         .foregroundStyle(.white.opacity(0.85))
 
-                    Label(
-                        model.automaticSyncEnabled ? "Sincronização automática" : "Sincronização manual",
-                        systemImage: model.automaticSyncEnabled ? "bolt.fill" : "hand.tap.fill"
-                    )
+                    Label {
+                        Text(model.automaticSyncEnabled ? .automaticSync : .manualSync)
+                    } icon: {
+                        Image(systemName: model.automaticSyncEnabled ? "bolt.fill" : "hand.tap.fill")
+                    }
                     .font(.subheadline)
                     .foregroundStyle(.white.opacity(0.85))
                 }

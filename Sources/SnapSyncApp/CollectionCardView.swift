@@ -11,7 +11,7 @@ struct CollectionCardView: View {
                 .opacity(card.isOwned ? 1 : 0.55)
                 .overlay(alignment: .topTrailing) {
                     if card.isOwned == false {
-                        Label("Faltando", systemImage: "lock.fill")
+                        Label(.missing, systemImage: "lock.fill")
                             .font(.caption)
                             .padding(6)
                             .background(.regularMaterial, in: .capsule)
@@ -28,14 +28,14 @@ struct CollectionCardView: View {
             if let ownedCard = card.ownedCard {
                 HStack {
                     Label(ownedCard.variants.count.formatted(), systemImage: "sparkles")
-                        .help("Variantes")
+                        .help(Text(.variantsHelp))
                     Spacer()
                     Label((ownedCard.boosters ?? 0).formatted(), systemImage: "arrow.up.circle.fill")
-                        .help("Boosters")
+                        .help(Text(.boostersHelp))
                 }
                 .foregroundStyle(.secondary)
             } else {
-                Label("Não possuída", systemImage: "lock.fill")
+                Label(.notOwned, systemImage: "lock.fill")
                     .foregroundStyle(.secondary)
             }
         }
@@ -43,14 +43,14 @@ struct CollectionCardView: View {
         .background(.regularMaterial, in: .rect(cornerRadius: 16))
         .shadow(color: .purple.opacity(0.1), radius: 8, y: 4)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(accessibilityLabel)
+        .accessibilityLabel(Text(accessibilityLabel))
     }
 
-    private var accessibilityLabel: String {
+    private var accessibilityLabel: LocalizedStringResource {
         if let ownedCard = card.ownedCard {
-            "\(card.name), possuída, \(ownedCard.variants.count) variantes, \(ownedCard.boosters ?? 0) boosters"
+            .collectionOwnedAccessibility(card.name, ownedCard.variants.count, ownedCard.boosters ?? 0)
         } else {
-            "\(card.name), não possuída"
+            .collectionMissingAccessibility(card.name)
         }
     }
 }

@@ -5,20 +5,17 @@ struct AccountConnectionView: View {
     @State private var confirmsDisconnect = false
 
     var body: some View {
-        SettingsCard(title: "MarvelSnap.pro", systemImage: "link.circle.fill", tint: .purple) {
+        SettingsCard(title: .marvelSnapPro, systemImage: "link.circle.fill", tint: .purple) {
             HStack {
                 VStack(alignment: .leading) {
-                    Label(
-                        model.isLinked ? "Conta vinculada" : "Conta não vinculada",
-                        systemImage: model.isLinked ? "checkmark.seal.fill" : "person.crop.circle.badge.questionmark"
-                    )
+                    Label {
+                        Text(model.isLinked ? .accountLinked : .accountNotLinked)
+                    } icon: {
+                        Image(systemName: model.isLinked ? "checkmark.seal.fill" : "person.crop.circle.badge.questionmark")
+                    }
                     .font(.headline)
 
-                    Text(
-                        model.isLinked
-                            ? "Coleção e decks podem ser sincronizados com segurança."
-                            : "Vincule sua conta para começar a sincronizar."
-                    )
+                    Text(model.isLinked ? .accountLinkedDetail : .accountNotLinkedDetail)
                     .foregroundStyle(.secondary)
                 }
 
@@ -30,20 +27,24 @@ struct AccountConnectionView: View {
                 }
 
                 if model.isLinked {
-                    Button("Desconectar", role: .destructive, action: requestDisconnect)
+                    Button(role: .destructive, action: requestDisconnect) {
+                        Text(.disconnect)
+                    }
                         .disabled(model.isConnecting || model.isSyncing)
                         .confirmationDialog(
-                            "Desconectar do MarvelSnap.pro?",
+                            String(localized: .disconnectTitle),
                             isPresented: $confirmsDisconnect,
                             titleVisibility: .visible
                         ) {
-                            Button("Desconectar", role: .destructive, action: model.disconnect)
-                            Button("Cancelar", role: .cancel) {}
+                            Button(role: .destructive, action: model.disconnect) { Text(.disconnect) }
+                            Button(role: .cancel, action: {}) { Text(.cancel) }
                         } message: {
-                            Text("O token será removido do Keychain. Os dados locais serão mantidos.")
+                            Text(.disconnectMessage)
                         }
                 } else {
-                    Button("Conectar conta", systemImage: "link", action: connect)
+                    Button(action: connect) {
+                        Label(.connectAccount, systemImage: "link")
+                    }
                         .buttonStyle(.borderedProminent)
                         .tint(.purple)
                         .disabled(model.canConnect == false || model.isConnecting || model.isSyncing)

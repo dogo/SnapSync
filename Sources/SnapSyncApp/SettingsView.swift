@@ -8,20 +8,19 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: 18) {
                 SettingsHeaderView()
 
-                SettingsCard(title: "Sincronização", systemImage: "bolt.horizontal.circle.fill", tint: .blue) {
-                    Toggle(
-                        "Sincronizar automaticamente ao detectar mudanças",
-                        isOn: $model.automaticSyncEnabled
-                    )
+                SettingsCard(title: .syncSettingsTitle, systemImage: "bolt.horizontal.circle.fill", tint: .blue) {
+                    Toggle(isOn: $model.automaticSyncEnabled) {
+                        Text(.syncAutomaticallyOnChanges)
+                    }
                     .toggleStyle(.switch)
 
-                    Text("Quando o Marvel Snap alterar sua coleção ou seus decks, o envio acontece automaticamente.")
+                    Text(.syncAutomaticallyDetail)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
 
                     Divider()
 
-                    Label("Pasta do Marvel Snap", systemImage: "folder.fill")
+                    Label(.snapFolder, systemImage: "folder.fill")
                         .font(.headline)
 
                     Text(model.sourcePath)
@@ -33,19 +32,22 @@ struct SettingsView: View {
                         .background(.quaternary, in: .rect(cornerRadius: 10))
 
                     HStack {
-                        Label(
-                            model.canConnect ? "Fonte de dados ativa" : "Pasta ainda não configurada",
-                            systemImage: model.canConnect ? "checkmark.circle.fill" : "exclamationmark.circle"
-                        )
+                        Label {
+                            Text(model.canConnect ? .activeDataSource : .folderNotConfigured)
+                        } icon: {
+                            Image(systemName: model.canConnect ? "checkmark.circle.fill" : "exclamationmark.circle")
+                        }
                         .foregroundStyle(.secondary)
 
                         Spacer()
 
-                        Button(
-                            model.canConnect ? "Alterar pasta…" : "Escolher pasta…",
-                            systemImage: "folder.badge.gearshape",
-                            action: chooseFolder
-                        )
+                        Button(action: chooseFolder) {
+                            Label {
+                                Text(model.canConnect ? .changeFolder : .chooseFolder)
+                            } icon: {
+                                Image(systemName: "folder.badge.gearshape")
+                            }
+                        }
                         .disabled(model.isSyncing || model.isConnecting)
                     }
                 }
@@ -64,7 +66,7 @@ struct SettingsView: View {
             )
             .ignoresSafeArea()
         }
-        .navigationTitle("Ajustes")
+        .navigationTitle(Text(.sectionSettings))
     }
 
     private func chooseFolder() {
@@ -72,8 +74,8 @@ struct SettingsView: View {
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = false
-        panel.message = "Selecione a pasta nvprod do Marvel Snap."
-        panel.prompt = "Selecionar"
+        panel.message = String(localized: .folderPickerMessage)
+        panel.prompt = String(localized: .folderPickerPrompt)
         if panel.runModal() == .OK, let url = panel.url {
             model.selectFolder(url)
         }

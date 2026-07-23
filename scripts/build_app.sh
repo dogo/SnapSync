@@ -9,6 +9,7 @@ contents_dir="$app_dir/Contents"
 signing_identity=${SNAPSYNC_SIGNING_IDENTITY:--}
 
 cd "$project_dir"
+"$script_dir/update_localizations.sh"
 swift build -c release --product SnapSyncApp
 bin_dir=$(swift build -c release --show-bin-path)
 

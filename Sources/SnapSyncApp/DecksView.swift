@@ -22,10 +22,10 @@ struct DecksView: View {
                             .font(.largeTitle)
                             .foregroundStyle(.secondary)
                             .accessibilityHidden(true)
-                        Text(model.decks.isEmpty ? "Nenhum deck encontrado" : "Nenhum resultado")
+                        Text(model.decks.isEmpty ? .emptyNoDecks : .emptyNoResults)
                             .font(.title2)
                             .bold()
-                        Text(model.decks.isEmpty ? "Selecione uma pasta válida do Marvel Snap nos Ajustes." : "Tente outro nome de deck.")
+                        Text(model.decks.isEmpty ? .emptyValidFolderSettings : .emptyTryAnotherDeckName)
                             .foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity)
@@ -39,8 +39,8 @@ struct DecksView: View {
                                 DeckPreviewCard(deck: deck)
                             }
                             .buttonStyle(.plain)
-                            .accessibilityLabel("\(deck.name), \(deck.cardDefinitionIDs.count) cartas")
-                            .accessibilityHint("Abre o conteúdo do deck")
+                            .accessibilityLabel(Text(.deckAccessibility(deck.name, deck.cardDefinitionIDs.count)))
+                            .accessibilityHint(Text(.openDeckAccessibilityHint))
                         }
                     }
                 }
@@ -55,8 +55,8 @@ struct DecksView: View {
             )
             .ignoresSafeArea()
         }
-        .navigationTitle("Decks")
-        .searchable(text: $searchText, prompt: "Buscar deck")
+        .navigationTitle(Text(.sectionDecks))
+        .searchable(text: $searchText, prompt: Text(.searchDeck))
         .sheet(item: $selectedDeck) { deck in
             DeckDetailView(deck: deck)
         }
@@ -80,12 +80,12 @@ private struct DecksHeaderView: View {
                     .accessibilityHidden(true)
 
                 VStack(alignment: .leading) {
-                    Text("Seus decks")
+                    Text(.decksHeaderTitle)
                         .font(.title)
                         .bold()
-                    Text("Abra um deck para conferir suas cartas.")
+                    Text(.decksHeaderSubtitle)
                         .foregroundStyle(.white.opacity(0.85))
-                    Text("^[\(deckCount) deck](inflect: true)")
+                    Text(.deckCount(deckCount))
                         .font(.subheadline)
                         .foregroundStyle(.white.opacity(0.85))
                 }
@@ -131,7 +131,7 @@ private struct DeckPreviewCard: View {
                 .font(.headline)
                 .lineLimit(2)
 
-            Label("^[\(deck.cardDefinitionIDs.count) carta](inflect: true)", systemImage: "rectangle.stack.fill")
+            Label(.cardCount(deck.cardDefinitionIDs.count), systemImage: "rectangle.stack.fill")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
@@ -176,7 +176,9 @@ private struct DeckDetailView: View {
             .navigationTitle(deck.name)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Fechar") { dismiss() }
+                    Button(action: dismiss.callAsFunction) {
+                        Text(.close)
+                    }
                 }
             }
         }

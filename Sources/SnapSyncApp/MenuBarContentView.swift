@@ -9,16 +9,24 @@ struct MenuBarContentView: View {
 
         Divider()
 
-        Button("Sincronizar agora", action: synchronize)
+        Button(action: synchronize) {
+            Text(.syncNow)
+        }
         .disabled(model.canSync == false || model.isSyncing || model.isConnecting)
 
-        Toggle("Sincronização automática", isOn: $model.automaticSyncEnabled)
+        Toggle(isOn: $model.automaticSyncEnabled) {
+            Text(.automaticSync)
+        }
 
-        Button("Abrir janela", action: openDashboard)
+        Button(action: openDashboard) {
+            Text(.openWindow)
+        }
 
         Divider()
 
-        Button("Sair", action: quit)
+        Button(action: quit) {
+            Text(.quit)
+        }
     }
 
     private var statusImage: String {

@@ -6,27 +6,27 @@ struct InventorySummaryView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Label("Recursos", systemImage: "wallet.pass.fill")
+            Label(.resources, systemImage: "wallet.pass.fill")
                 .font(.title2)
                 .bold()
 
             LazyVGrid(columns: columns) {
-                MetricCard(title: "Créditos", value: formatted(model.credits), systemImage: "bolt.fill", tint: .blue)
-                MetricCard(title: "Ouro", value: formatted(model.gold), systemImage: "circle.fill", tint: .yellow)
+                MetricCard(title: .credits, value: formatted(model.credits), systemImage: "bolt.fill", tint: .blue)
+                MetricCard(title: .gold, value: formatted(model.gold), systemImage: "circle.fill", tint: .yellow)
                 MetricCard(
-                    title: "Tokens",
+                    title: .tokens,
                     value: formatted(model.collectorsTokens),
                     systemImage: "hexagon.fill",
                     tint: .orange
                 )
                 MetricCard(
-                    title: "Boosters curingas",
+                    title: .wildBoosters,
                     value: formatted(model.wildBoosters),
                     systemImage: "sparkles",
                     tint: .purple
                 )
                 MetricCard(
-                    title: "Boosters de cartas",
+                    title: .cardBoosters,
                     value: model.boosterCount.formatted(),
                     systemImage: "arrow.up.circle.fill",
                     tint: .pink

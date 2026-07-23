@@ -11,25 +11,25 @@ struct OverviewView: View {
 
                 LazyVGrid(columns: columns) {
                     MetricCard(
-                        title: "Cartas",
+                        title: .metricCards,
                         value: model.cardCount.formatted(),
                         systemImage: "rectangle.stack.fill",
                         tint: .purple
                     )
                     MetricCard(
-                        title: "Variantes",
+                        title: .metricVariants,
                         value: model.variantCount.formatted(),
                         systemImage: "sparkles.rectangle.stack",
                         tint: .pink
                     )
                     MetricCard(
-                        title: "Decks",
+                        title: .metricDecks,
                         value: model.deckCount.formatted(),
                         systemImage: "square.stack.3d.up.fill",
                         tint: .blue
                     )
                     MetricCard(
-                        title: "Nível",
+                        title: .metricCollectionLevel,
                         value: model.collectionLevel?.formatted() ?? "—",
                         systemImage: "chart.line.uptrend.xyaxis",
                         tint: .orange
@@ -49,6 +49,6 @@ struct OverviewView: View {
             )
             .ignoresSafeArea()
         }
-        .navigationTitle("Visão geral")
+        .navigationTitle(Text(.sectionOverview))
     }
 }

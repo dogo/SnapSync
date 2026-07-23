@@ -8,28 +8,40 @@ struct CollectionControlsView: View {
 
     var body: some View {
         HStack {
-            Label("Visualização", systemImage: "line.3.horizontal.decrease.circle.fill")
+            Label(.viewOptions, systemImage: "line.3.horizontal.decrease.circle.fill")
                 .font(.headline)
 
             Spacer()
 
-            Picker("Filtro", selection: $filter) {
+            Picker(selection: $filter) {
                 ForEach(CollectionFilter.allCases) { option in
-                    Label(option.title, systemImage: option.systemImage)
+                    Label {
+                        Text(option.title)
+                    } icon: {
+                        Image(systemName: option.systemImage)
+                    }
                         .tag(option)
                 }
+            } label: {
+                Text(.filter)
             }
             .pickerStyle(.menu)
 
-            Picker("Ordenar", selection: $sort) {
+            Picker(selection: $sort) {
                 ForEach(CollectionSort.allCases) { option in
-                    Label(option.title, systemImage: option.systemImage)
+                    Label {
+                        Text(option.title)
+                    } icon: {
+                        Image(systemName: option.systemImage)
+                    }
                         .tag(option)
                 }
+            } label: {
+                Text(.sort)
             }
             .pickerStyle(.menu)
 
-            Text("^[\(resultCount) resultado](inflect: true)")
+            Text(.resultCount(resultCount))
                 .foregroundStyle(.secondary)
         }
         .padding()
@@ -38,14 +50,14 @@ struct CollectionControlsView: View {
 }
 
 private extension CollectionFilter {
-    var title: String {
+    var title: LocalizedStringResource {
         switch self {
-        case .all: "Todas"
-        case .owned: "Possuídas"
-        case .missing: "Faltantes"
-        case .withVariants: "Com variantes"
-        case .withBoosters: "Com boosters"
-        case .withoutBoosters: "Sem boosters"
+        case .all: .filterAll
+        case .owned: .filterOwned
+        case .missing: .filterMissing
+        case .withVariants: .filterWithVariants
+        case .withBoosters: .filterWithBoosters
+        case .withoutBoosters: .filterWithoutBoosters
         }
     }
 
@@ -62,12 +74,12 @@ private extension CollectionFilter {
 }
 
 private extension CollectionSort {
-    var title: String {
+    var title: LocalizedStringResource {
         switch self {
-        case .nameAscending: "Nome A–Z"
-        case .nameDescending: "Nome Z–A"
-        case .mostVariants: "Mais variantes"
-        case .mostBoosters: "Mais boosters"
+        case .nameAscending: .sortNameAscending
+        case .nameDescending: .sortNameDescending
+        case .mostVariants: .sortMostVariants
+        case .mostBoosters: .sortMostBoosters
         }
     }
 

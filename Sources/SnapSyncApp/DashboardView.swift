@@ -14,9 +14,9 @@ struct DashboardView: View {
                         .accessibilityHidden(true)
 
                     VStack(alignment: .leading) {
-                        Text("SnapSync")
+                        Text(.appTitle)
                             .font(.headline)
-                        Text("Marvel Snap companion")
+                        Text(.appSubtitle)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -28,7 +28,11 @@ struct DashboardView: View {
                 Divider()
 
                 List(DashboardSection.allCases, selection: $selection) { section in
-                    Label(section.title, systemImage: section.systemImage)
+                    Label {
+                        Text(section.title)
+                    } icon: {
+                        Image(systemName: section.systemImage)
+                    }
                         .tag(section)
                 }
             }
@@ -48,7 +52,9 @@ struct DashboardView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button("Sincronizar agora", systemImage: "arrow.triangle.2.circlepath", action: synchronize)
+                    Button(action: synchronize) {
+                        Label(.syncNow, systemImage: "arrow.triangle.2.circlepath")
+                    }
                         .disabled(model.canSync == false || model.isSyncing || model.isConnecting)
                 }
             }

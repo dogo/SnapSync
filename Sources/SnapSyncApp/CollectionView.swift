@@ -28,10 +28,7 @@ struct CollectionView: View {
                 )
 
                 if catalogUnavailable {
-                    Label(
-                        "Catálogo completo indisponível; mostrando apenas suas cartas.",
-                        systemImage: "exclamationmark.triangle.fill"
-                    )
+                    Label(.collectionCatalogUnavailable, systemImage: "exclamationmark.triangle.fill")
                     .foregroundStyle(.secondary)
                 }
 
@@ -43,10 +40,10 @@ struct CollectionView: View {
                             .font(.largeTitle)
                             .foregroundStyle(.secondary)
                             .accessibilityHidden(true)
-                        Text(model.collection.isEmpty ? "Nenhuma carta encontrada" : "Nenhum resultado")
+                        Text(model.collection.isEmpty ? .emptyNoCards : .emptyNoResults)
                             .font(.title2)
                             .bold()
-                        Text(model.collection.isEmpty ? "Selecione uma pasta válida do Marvel Snap nos Ajustes." : "Ajuste a busca ou os filtros.")
+                        Text(model.collection.isEmpty ? .emptyValidFolderSettings : .emptyAdjustSearchFilters)
                             .foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity)
@@ -69,8 +66,8 @@ struct CollectionView: View {
             )
             .ignoresSafeArea()
         }
-        .navigationTitle("Coleção")
-        .searchable(text: $searchText, prompt: "Buscar carta")
+        .navigationTitle(Text(.sectionCollection))
+        .searchable(text: $searchText, prompt: Text(.searchCard))
         .task { await loadCatalog() }
     }
 

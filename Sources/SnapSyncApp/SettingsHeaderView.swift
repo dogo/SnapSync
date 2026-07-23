@@ -17,12 +17,12 @@ struct SettingsHeaderView: View {
                     .accessibilityHidden(true)
 
                 VStack(alignment: .leading) {
-                    Text("Do seu jeito")
+                    Text(.settingsHeaderTitle)
                         .font(.title)
                         .bold()
-                    Text("Controle sincronização, conta e dados locais.")
+                    Text(.settingsHeaderSubtitle)
                         .foregroundStyle(.white.opacity(0.85))
-                    Label("Token protegido pelo Keychain", systemImage: "lock.fill")
+                    Label(.keychainProtected, systemImage: "lock.fill")
                         .font(.subheadline)
                         .foregroundStyle(.white.opacity(0.85))
                 }

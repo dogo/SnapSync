@@ -6,25 +6,37 @@ struct SnapshotChangesView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Label("Últimas mudanças", systemImage: "clock.arrow.circlepath")
+            Label(.historyTitle, systemImage: "clock.arrow.circlepath")
                 .font(.title2)
                 .bold()
 
             Group {
                 if let change {
                     HStack {
-                        LabeledContent("Cartas novas", value: change.newCards.formatted())
+                        LabeledContent {
+                            Text(change.newCards.formatted())
+                        } label: {
+                            Text(.historyNewCards)
+                        }
                         Divider()
-                        LabeledContent("Variantes novas", value: change.newVariants.formatted())
+                        LabeledContent {
+                            Text(change.newVariants.formatted())
+                        } label: {
+                            Text(.historyNewVariants)
+                        }
                         Divider()
-                        LabeledContent("Decks alterados", value: change.changedDecks.formatted())
+                        LabeledContent {
+                            Text(change.changedDecks.formatted())
+                        } label: {
+                            Text(.historyChangedDecks)
+                        }
                     }
 
                     Text(change.observedAt, format: .dateTime.day().month().year().hour().minute())
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 } else {
-                    Label("Aguardando a próxima mudança na coleção ou nos decks.", systemImage: "sparkles")
+                    Label(.historyWaiting, systemImage: "sparkles")
                         .foregroundStyle(.secondary)
                 }
             }

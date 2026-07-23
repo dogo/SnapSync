@@ -1,14 +1,18 @@
 import SwiftUI
 
 struct MetricCard: View {
-    let title: String
+    let title: LocalizedStringResource
     let value: String
     let systemImage: String
     let tint: Color
 
     var body: some View {
         VStack(alignment: .leading) {
-            Label(title, systemImage: systemImage)
+            Label {
+                Text(title)
+            } icon: {
+                Image(systemName: systemImage)
+            }
                 .foregroundStyle(tint)
 
             Text(value)

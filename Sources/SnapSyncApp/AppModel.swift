@@ -6,7 +6,7 @@ import SnapSyncCore
 
 @MainActor
 final class AppModel: ObservableObject {
-    @Published private(set) var statusText = "Procurando Marvel Snap…"
+    @Published private(set) var statusText = String(localized: .statusLocatingSnap)
     @Published private(set) var accountName = "—"
     @Published private(set) var collection: [SnapSnapshot.OwnedCard] = []
     @Published private(set) var decks: [SnapSnapshot.Deck] = []
@@ -81,7 +81,7 @@ final class AppModel: ObservableObject {
     func synchronize() async {
         guard let source, isSyncing == false, isConnecting == false else { return }
         isSyncing = true
-        statusText = "Sincronizando…"
+        statusText = String(localized: .statusSyncing)
         hasError = false
         defer { isSyncing = false }
 
@@ -91,12 +91,12 @@ final class AppModel: ObservableObject {
             update(snapshot, source: refreshedSource)
             switch try await synchronizer.synchronize(refreshedSource) {
             case .unchanged:
-                statusText = "Já está atualizado"
+                statusText = String(localized: .statusUpToDate)
             case .synchronized:
-                statusText = "Sincronizado às \(Date.now.formatted(date: .omitted, time: .shortened))"
+                statusText = String(localized: .statusSyncedAt(Date.now.formatted(date: .omitted, time: .shortened)))
             }
         } catch is CancellationError {
-            statusText = "Sincronização cancelada"
+            statusText = String(localized: .statusSyncCancelled)
         } catch {
             show(error)
         }
@@ -105,7 +105,7 @@ final class AppModel: ObservableObject {
     func connect() async {
         guard let source, isConnecting == false, isSyncing == false else { return }
         isConnecting = true
-        statusText = "Conectando ao MarvelSnap.pro…"
+        statusText = String(localized: .statusConnecting)
         hasError = false
         defer { isConnecting = false }
 
@@ -116,7 +116,7 @@ final class AppModel: ObservableObject {
                   screenName.isEmpty == false else {
                 throw SnapSyncError.unsupportedSchema(
                     file: "ProfileState.json",
-                    reason: "account name or ID is missing"
+                    reason: String(localized: .accountMissingReason)
                 )
             }
 
@@ -128,10 +128,10 @@ final class AppModel: ObservableObject {
             }
             try KeychainTokenStore.save(connection.credential.token)
             isLinked = true
-            statusText = "Conectado como \(connection.credential.nickname)"
+            statusText = String(localized: .statusConnectedAs(connection.credential.nickname))
             startAutomaticSync()
         } catch is CancellationError {
-            statusText = "Conexão cancelada"
+            statusText = String(localized: .statusConnectionCancelled)
         } catch {
             show(error)
         }
@@ -143,7 +143,7 @@ final class AppModel: ObservableObject {
             try KeychainTokenStore.delete()
             isLinked = false
             startAutomaticSync()
-            statusText = "Conta MarvelSnap.pro desconectada"
+            statusText = String(localized: .statusDisconnected)
             hasError = false
         } catch {
             show(error)
@@ -178,7 +178,7 @@ final class AppModel: ObservableObject {
             boosterCount = 0
             lastChange = nil
             sourcePath = "—"
-            statusText = "Dados locais removidos"
+            statusText = String(localized: .statusLocalDataRemoved)
             hasError = false
         } catch {
             show(error)
@@ -188,7 +188,7 @@ final class AppModel: ObservableObject {
 
     private func update(_ snapshot: SnapSnapshot, source: SnapSource) {
         self.source = source
-        accountName = snapshot.account?.displayName ?? "Conta desconhecida"
+        accountName = snapshot.account?.displayName ?? String(localized: .unknownAccount)
         collection = snapshot.collection
         decks = snapshot.decks.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
         cardCount = collection.count
@@ -224,7 +224,7 @@ final class AppModel: ObservableObject {
     }
 
     private func showReady() {
-        statusText = isLinked ? "Pronto para sincronizar" : "Conecte sua conta MarvelSnap.pro"
+        statusText = String(localized: isLinked ? .statusReady : .statusConnectAccount)
         hasError = false
     }
 
@@ -255,9 +255,9 @@ final class AppModel: ObservableObject {
     }
 
     private func openConfirmationPage(_ url: URL) throws {
-        statusText = "Confirme o vínculo no navegador…"
+        statusText = String(localized: .statusConfirmBrowser)
         guard NSWorkspace.shared.open(url) else {
-            throw SnapSyncError.invalidArguments("Não foi possível abrir a confirmação do MarvelSnap.pro")
+            throw SnapSyncError.invalidArguments(String(localized: .errorOpenConfirmation))
         }
     }
 
