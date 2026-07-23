@@ -23,6 +23,12 @@ struct PrivacyNoticeView: View {
                     Text("Inventário e histórico permanecem somente neste Mac.")
                 }
                 GridRow(alignment: .firstTextBaseline) {
+                    Image(systemName: "photo.fill")
+                        .frame(width: 22)
+                        .accessibilityHidden(true)
+                    Text("Imagens de cartas são carregadas do CDN do MarvelSnap.pro.")
+                }
+                GridRow(alignment: .firstTextBaseline) {
                     Image(systemName: "eye.slash.fill")
                         .frame(width: 22)
                         .accessibilityHidden(true)

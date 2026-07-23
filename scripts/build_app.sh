@@ -18,10 +18,9 @@ install -m 755 "$bin_dir/SnapSyncApp" "$contents_dir/MacOS/SnapSync"
 install -m 644 "$project_dir/Packaging/Info.plist" "$contents_dir/Info.plist"
 install -m 644 "$project_dir/Sources/SnapSyncApp/Resources/AppIcon.icns" "$contents_dir/Resources/AppIcon.icns"
 
-resource_bundle="$bin_dir/SnapSync_SnapSyncApp.bundle"
-if [[ -d "$resource_bundle" ]]; then
-    ditto "$resource_bundle" "$contents_dir/Resources/SnapSync_SnapSyncApp.bundle"
-fi
+for resource_bundle in "$bin_dir"/*.bundle(N); do
+    ditto "$resource_bundle" "$contents_dir/Resources/${resource_bundle:t}"
+done
 
 plutil -lint "$contents_dir/Info.plist"
 if [[ "$signing_identity" == "-" ]]; then

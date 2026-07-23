@@ -12,6 +12,7 @@ It reads game files without modifying them. No overlay, OCR, memory inspection, 
 - Manual folder selection with a persistent read-only security-scoped bookmark.
 - Versioned parsing of account, collection, variants, and decks.
 - Local inventory summary with collection level, currencies, and card boosters.
+- Searchable collection browser with filters, sorting, and cached artwork from MarvelSnap.pro.
 - Private lightweight history of the latest collection and deck changes.
 - Manual and automatic synchronization with debounce, retry, idempotency, and an offline outbox.
 - Native SwiftUI dashboard and menu bar controls.

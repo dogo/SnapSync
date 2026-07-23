@@ -4,30 +4,40 @@ import SwiftUI
 struct CollectionView: View {
     @ObservedObject var model: AppModel
     @State private var searchText = ""
-    private let columns = [GridItem(.adaptive(minimum: 190))]
+    @State private var filter: CollectionFilter = .all
+    @State private var sort: CollectionSort = .nameAscending
+    private let columns = [GridItem(.adaptive(minimum: 200))]
 
     var body: some View {
+        let cards = CollectionQuery.results(
+            in: model.collection,
+            searchText: searchText,
+            filter: filter,
+            sort: sort
+        )
+
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 CollectionHeaderView(cardCount: model.cardCount, variantCount: model.variantCount)
+                CollectionControlsView(filter: $filter, sort: $sort, resultCount: cards.count)
 
-                if filteredCards.isEmpty {
+                if cards.isEmpty {
                     VStack {
                         Image(systemName: searchText.isEmpty ? "rectangle.stack.badge.questionmark" : "magnifyingglass")
                             .font(.largeTitle)
                             .foregroundStyle(.secondary)
                             .accessibilityHidden(true)
-                        Text(searchText.isEmpty ? "Nenhuma carta encontrada" : "Nenhum resultado")
+                        Text(model.collection.isEmpty ? "Nenhuma carta encontrada" : "Nenhum resultado")
                             .font(.title2)
                             .bold()
-                        Text(searchText.isEmpty ? "Selecione uma pasta válida do Marvel Snap nos Ajustes." : "Tente outro nome de carta.")
+                        Text(model.collection.isEmpty ? "Selecione uma pasta válida do Marvel Snap nos Ajustes." : "Ajuste a busca ou os filtros.")
                             .foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
                 } else {
                     LazyVGrid(columns: columns) {
-                        ForEach(filteredCards) { card in
+                        ForEach(cards) { card in
                             CollectionCardView(card: card)
                         }
                     }
@@ -45,11 +55,5 @@ struct CollectionView: View {
         }
         .navigationTitle("Coleção")
         .searchable(text: $searchText, prompt: "Buscar carta")
-    }
-
-    private var filteredCards: [SnapSnapshot.OwnedCard] {
-        let query = searchText.replacing(" ", with: "")
-        guard query.isEmpty == false else { return model.collection }
-        return model.collection.filter { $0.definitionID.localizedStandardContains(query) }
     }
 }

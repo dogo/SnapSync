@@ -6,23 +6,11 @@ struct CollectionCardView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Image(systemName: "rectangle.portrait.fill")
-                    .font(.title)
-                    .foregroundStyle(.white)
-                    .frame(width: 44, height: 54)
-                    .background {
-                        LinearGradient(colors: [.purple, .blue], startPoint: .topLeading, endPoint: .bottomTrailing)
-                    }
-                    .clipShape(.rect(cornerRadius: 10))
-                    .accessibilityHidden(true)
+            CollectionCardImageView(definitionID: card.definitionID)
 
-                Text(displayName)
-                    .font(.headline)
-                    .lineLimit(2)
-
-                Spacer()
-            }
+            Text(displayName)
+                .font(.headline)
+                .lineLimit(2)
 
             Divider()
 

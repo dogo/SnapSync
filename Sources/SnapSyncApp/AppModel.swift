@@ -186,9 +186,7 @@ final class AppModel: ObservableObject {
     private func update(_ snapshot: SnapSnapshot, source: SnapSource) {
         self.source = source
         accountName = snapshot.account?.displayName ?? "Conta desconhecida"
-        collection = snapshot.collection.sorted {
-            $0.definitionID.localizedStandardCompare($1.definitionID) == .orderedAscending
-        }
+        collection = snapshot.collection
         cardCount = collection.count
         variantCount = collection.reduce(0) { $0 + $1.variants.count }
         deckCount = snapshot.decks.count

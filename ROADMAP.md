@@ -175,7 +175,7 @@ Criteria:
 - export plus manual and automatic synchronization;
 - idempotency and offline recovery;
 - native sidebar interface with dedicated overview and settings screens; ✅
-- searchable local collection browser; ✅
+- searchable local collection browser with filters, sorting, and cached artwork; ✅
 - deck browser with card contents;
 - usable diagnostics;
 - signed and notarized distribution with documented privacy.

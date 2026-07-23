@@ -9,12 +9,18 @@ let package = Package(
         .executable(name: "snapsync", targets: ["SnapSyncCLI"]),
         .executable(name: "SnapSyncApp", targets: ["SnapSyncApp"])
     ],
+    dependencies: [
+        .package(url: "https://github.com/onevcat/Kingfisher.git", from: "8.11.0")
+    ],
     targets: [
         .target(name: "SnapSyncCore"),
         .executableTarget(name: "SnapSyncCLI", dependencies: ["SnapSyncCore"]),
         .executableTarget(
             name: "SnapSyncApp",
-            dependencies: ["SnapSyncCore"],
+            dependencies: [
+                "SnapSyncCore",
+                .product(name: "Kingfisher", package: "Kingfisher"),
+            ],
             resources: [.process("Resources")]
         ),
         .testTarget(

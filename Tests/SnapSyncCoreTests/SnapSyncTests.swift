@@ -480,6 +480,67 @@ struct SnapSyncTests {
         }
     }
 
+    @Test func collectionQueryMatchesNamesWithSpaces() {
+        let results = CollectionQuery.results(
+            in: collectionCards,
+            searchText: "ant man",
+            filter: .all,
+            sort: .nameAscending
+        )
+
+        #expect(results.map(\.definitionID) == ["AntMan"])
+    }
+
+    @Test func collectionQueryFiltersVariantsAndBoosters() {
+        let variants = CollectionQuery.results(
+            in: collectionCards,
+            searchText: "",
+            filter: .withVariants,
+            sort: .nameAscending
+        )
+        let withoutBoosters = CollectionQuery.results(
+            in: collectionCards,
+            searchText: "",
+            filter: .withoutBoosters,
+            sort: .nameAscending
+        )
+        let withBoosters = CollectionQuery.results(
+            in: collectionCards,
+            searchText: "",
+            filter: .withBoosters,
+            sort: .nameAscending
+        )
+
+        #expect(variants.map(\.definitionID) == ["AntMan", "BlueMarvel"])
+        #expect(withBoosters.map(\.definitionID) == ["AntMan", "BlueMarvel"])
+        #expect(withoutBoosters.map(\.definitionID) == ["Hulk"])
+    }
+
+    @Test func collectionQuerySortsByVariantsAndBoosters() {
+        let variants = CollectionQuery.results(
+            in: collectionCards,
+            searchText: "",
+            filter: .all,
+            sort: .mostVariants
+        )
+        let boosters = CollectionQuery.results(
+            in: collectionCards,
+            searchText: "",
+            filter: .all,
+            sort: .mostBoosters
+        )
+        let namesDescending = CollectionQuery.results(
+            in: collectionCards,
+            searchText: "",
+            filter: .all,
+            sort: .nameDescending
+        )
+
+        #expect(variants.map(\.definitionID) == ["BlueMarvel", "AntMan", "Hulk"])
+        #expect(boosters.map(\.definitionID) == ["AntMan", "BlueMarvel", "Hulk"])
+        #expect(namesDescending.map(\.definitionID) == ["Hulk", "BlueMarvel", "AntMan"])
+    }
+
     @Test(.tags(.networking))
     func linksAccountWithoutLiveNetwork() async throws {
         let recorder = HTTPRecorder(responses: [
@@ -529,5 +590,23 @@ struct SnapSyncTests {
         let compressed = try #require(Data(base64Encoded: encodedBody))
         let decodedEvents = try JSONDecoder().decode([MarvelSnapProEvent].self, from: gunzip(compressed))
         #expect(decodedEvents == [event])
+    }
+
+    private var collectionCards: [SnapSnapshot.OwnedCard] {
+        [
+            ownedCard("AntMan", variants: 2, boosters: 12),
+            ownedCard("BlueMarvel", variants: 3, boosters: 5),
+            ownedCard("Hulk", variants: 1, boosters: nil),
+        ]
+    }
+
+    private func ownedCard(_ definitionID: String, variants: Int, boosters: Int?) -> SnapSnapshot.OwnedCard {
+        SnapSnapshot.OwnedCard(
+            definitionID: definitionID,
+            variants: (0..<variants).map {
+                SnapSnapshot.Variant(id: "\(definitionID)-\($0)", variantID: nil, rarityID: nil, borderID: nil)
+            },
+            boosters: boosters
+        )
     }
 }
