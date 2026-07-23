@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct SnapSyncApplication: App {
+struct SnapCompanionApplication: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var model = AppModel()
 

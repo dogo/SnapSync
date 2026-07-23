@@ -4,26 +4,26 @@ set -euo pipefail
 
 script_dir=${0:A:h}
 project_dir=${script_dir:h}
-app_dir="$project_dir/dist/SnapSync.app"
-contents_dir="$app_dir/Contents"
+app_dir="$project_dir/dist/SnapCompanion.app"
+derived_data="$project_dir/.build/tuist"
 signing_identity=${SNAPSYNC_SIGNING_IDENTITY:--}
 
 cd "$project_dir"
-"$script_dir/update_localizations.sh"
-swift build -c release --product SnapSyncApp
-bin_dir=$(swift build -c release --show-bin-path)
+mise exec -- tuist generate --no-open
+xcodebuild \
+    -workspace SnapCompanion.xcworkspace \
+    -scheme SnapCompanionApp \
+    -configuration Release \
+    -destination "platform=macOS" \
+    -derivedDataPath "$derived_data" \
+    CODE_SIGNING_ALLOWED=NO \
+    build
 
 rm -rf "$app_dir"
-mkdir -p "$contents_dir/MacOS" "$contents_dir/Resources"
-install -m 755 "$bin_dir/SnapSyncApp" "$contents_dir/MacOS/SnapSync"
-install -m 644 "$project_dir/Packaging/Info.plist" "$contents_dir/Info.plist"
-install -m 644 "$project_dir/Sources/SnapSyncApp/Resources/AppIcon.icns" "$contents_dir/Resources/AppIcon.icns"
+mkdir -p "$project_dir/dist"
+ditto "$derived_data/Build/Products/Release/SnapCompanion.app" "$app_dir"
 
-for resource_bundle in "$bin_dir"/*.bundle(N); do
-    ditto "$resource_bundle" "$contents_dir/Resources/${resource_bundle:t}"
-done
-
-plutil -lint "$contents_dir/Info.plist"
+plutil -lint "$app_dir/Contents/Info.plist"
 if [[ "$signing_identity" == "-" ]]; then
     codesign --force --sign - "$app_dir"
 else

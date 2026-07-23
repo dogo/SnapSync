@@ -12,7 +12,7 @@ fi
 
 script_dir=${0:A:h}
 project_dir=${script_dir:h}
-dmg_path="$project_dir/dist/SnapSync.dmg"
+dmg_path="$project_dir/dist/SnapCompanion.dmg"
 
 security find-identity -v -p codesigning | grep -Fq "$SNAPSYNC_SIGNING_IDENTITY"
 "$script_dir/build_dmg.sh"

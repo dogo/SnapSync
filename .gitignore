@@ -1,5 +1,9 @@
 .build/
 .swiftpm/
+*.xcodeproj/
+*.xcworkspace/
+.tuist-cache/
+Derived/
 .bundle/
 vendor/bundle/
 dist/

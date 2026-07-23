@@ -54,7 +54,7 @@ A native macOS app that locates local Marvel Snap data, generates a normalized s
 - Native `nvprod` monitoring with a 600 ms debounce and serialized uploads.
 - Retry for transient failures with backoff, cancellation, and `Retry-After` support in seconds or HTTP-date format.
 - Atomic, private (`0600`) latest-wins outbox cleared only after a successful checkpoint.
-- SwiftUI `SnapSyncApp` target with dashboard, local data, and manual synchronization.
+- Tuist-generated native Xcode app target with dashboard, local data, and manual synchronization.
 - Synchronization coordinator shared between the CLI and app.
 - Manual selection through `NSOpenPanel` with a private (`0600`), read-only security-scoped bookmark.
 - `MenuBarExtra` sharing dashboard state and synchronization.
@@ -63,7 +63,7 @@ A native macOS app that locates local Marvel Snap data, generates a normalized s
 - Versioned privacy policy and an in-dashboard privacy summary.
 - `snapsync doctor` checks the local environment without exposing paths, accounts, decks, or tokens.
 - Native discovery, parsing, and synchronization logs through `OSLog`, without private data.
-- Reproducible `SnapSync.app` bundle with an icon, resource bundle, and configurable signing.
+- Reproducible `SnapSync.app` bundle with an icon, localized resources, and configurable signing.
 - Compressed and validated DMG containing the app and an `/Applications` shortcut.
 - Fastlane/Match Developer ID and notarization pipeline without repository credentials.
 - App ID and Developer ID certificate created; certificate installed and stored encrypted in the Match repository.
