@@ -84,7 +84,7 @@ struct CardDetailView: View {
                     }
 
                     if let text = card.text {
-                        Text(text)
+                        Text((try? AttributedString(markdown: text)) ?? AttributedString(text))
                             .font(.body)
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: 360)

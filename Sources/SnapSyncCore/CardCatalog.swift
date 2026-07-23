@@ -46,7 +46,7 @@ public actor CardCatalog {
                     name: name,
                     cost: card.cost.flatMap { Int($0) },
                     power: card.power.flatMap { Int($0) },
-                    text: card.description.map(Self.plainText).flatMap { $0.isEmpty ? nil : $0 }
+                    text: card.description.map(Self.markdownText).flatMap { $0.isEmpty ? nil : $0 }
                 )
             }
             let entries = entriesByID.values.sorted {
@@ -99,8 +99,12 @@ public actor CardCatalog {
         let entries: [CardCatalogEntry]
     }
 
-    private static func plainText(_ html: String) -> String {
-        html.replacing(/<[^>]+>/, with: "").trimmingCharacters(in: .whitespacesAndNewlines)
+    private static func markdownText(_ html: String) -> String {
+        html
+            .replacing(/<\/?b>/.ignoresCase(), with: "**")
+            .replacing(/<\/?i>/.ignoresCase(), with: "*")
+            .replacing(/<[^>]+>/, with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private struct RemoteCard: Decodable {
