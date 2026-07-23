@@ -1,0 +1,17 @@
+{
+  "AccountId": "fixture-account",
+  "ServerState": {
+    "Account": {
+      "Id": "fixture-account",
+      "Name": "Fixture Player"
+    },
+    "Wallet": {
+      "_currencies": {
+        "Credits": { "Credits": { "TotalAmount": 1200 } },
+        "Gold": { "Gold": { "TotalAmount": 300 } },
+        "CollectorsTokens": { "CollectorsTokens": { "TotalAmount": 700 } },
+        "WildBooster": { "WildBooster": { "TotalAmount": 25 } }
+      }
+    }
+  }
+}

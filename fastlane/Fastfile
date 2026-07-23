@@ -1,0 +1,34 @@
+fastlane_version "2.236.1"
+
+default_platform :mac
+
+platform :mac do
+  desc "Install the existing Developer ID certificate"
+  lane :certificates do
+    match(type: "developer_id", readonly: true, skip_provisioning_profiles: true)
+  end
+
+  desc "Create the Developer ID certificate when the shared vault has none"
+  lane :bootstrap_certificates do
+    match(type: "developer_id", readonly: false, skip_provisioning_profiles: true)
+  end
+
+  desc "Build, sign, notarize, staple, and validate the release DMG"
+  lane :release do
+    certificates
+
+    identity = ENV["SNAPSYNC_SIGNING_IDENTITY"]
+    unless identity
+      identities = sh("security find-identity -v -p codesigning", log: false)
+        .lines
+        .filter_map { |line| line[/\"(Developer ID Application:[^\"]+)\"/, 1] }
+        .uniq
+      UI.user_error!("Set SNAPSYNC_SIGNING_IDENTITY when multiple Developer ID identities exist") unless identities.one?
+      identity = identities.first
+    end
+
+    ENV["SNAPSYNC_SIGNING_IDENTITY"] = identity
+    ENV["SNAPSYNC_NOTARY_PROFILE"] ||= "SnapSync-notary"
+    sh("cd .. && ./scripts/notarize.sh")
+  end
+end

@@ -1,0 +1,44 @@
+{
+  "AccountId": "fixture-account",
+  "ApplicationVersion": "1.0",
+  "ServerState": {
+    "Cards": [
+      {
+        "Id": "card-1",
+        "CardDefId": "AntMan",
+        "ArtVariantDefId": "Base",
+        "RarityDefId": "Common",
+        "BorderDefId": "Gray"
+      },
+      {
+        "Id": "card-2",
+        "CardDefId": "AntMan",
+        "ArtVariantDefId": "Variant",
+        "RarityDefId": "Rare",
+        "BorderDefId": "Blue"
+      },
+      {
+        "Id": "card-3",
+        "CardDefId": "Hulk"
+      }
+    ],
+    "CardDefStats": {
+      "Stats": {
+        "AntMan": { "Boosters": 12 },
+        "Hulk": { "Boosters": 8 }
+      }
+    },
+    "CollectionScore": { "Amount": 321 },
+    "Decks": [
+      {
+        "Id": "deck-1",
+        "Name": "Starter",
+        "Cards": [
+          { "CardDefId": "AntMan" },
+          { "CardDefId": "Hulk" }
+        ],
+        "TimeUpdated": "2026-07-23T12:00:00Z"
+      }
+    ]
+  }
+}
