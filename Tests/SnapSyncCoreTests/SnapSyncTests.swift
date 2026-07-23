@@ -339,6 +339,7 @@ struct SnapSyncTests {
         #expect(snapshot.collection.count == 2)
         #expect(antMan.variants.count == 2)
         #expect(antMan.boosters == 12)
+        #expect(snapshot.decks.count == 1)
         #expect(snapshot.decks.first?.cardDefinitionIDs == ["AntMan", "Hulk"])
         #expect(snapshot.inventory.collectionLevel == 321)
         #expect(snapshot.inventory.credits == 1200)

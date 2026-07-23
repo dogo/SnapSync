@@ -38,6 +38,14 @@
           { "CardDefId": "Hulk" }
         ],
         "TimeUpdated": "2026-07-23T12:00:00Z"
+      },
+      {
+        "Id": "event-deck-1",
+        "Name": "Showdown Custom",
+        "Cards": [
+          { "CardDefId": "AntMan" }
+        ],
+        "DeckSlotDefId": "Showdown_Custom"
       }
     ]
   }

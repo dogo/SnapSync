@@ -1007,7 +1007,7 @@ public enum SnapshotIO {
             }
             .sorted { $0.definitionID < $1.definitionID }
 
-        let decks = rawDecks.map {
+        let decks = rawDecks.filter { $0.deckSlotDefinitionID == nil }.map {
             SnapSnapshot.Deck(
                 id: $0.id,
                 name: $0.name,
@@ -1227,12 +1227,14 @@ private struct RawDeck: Decodable {
     let name: String
     let cards: [RawDeckCard]?
     let lastModifiedAt: String?
+    let deckSlotDefinitionID: String?
 
     enum CodingKeys: String, CodingKey {
         case id = "Id"
         case name = "Name"
         case cards = "Cards"
         case lastModifiedAt = "TimeUpdated"
+        case deckSlotDefinitionID = "DeckSlotDefId"
     }
 }
 
