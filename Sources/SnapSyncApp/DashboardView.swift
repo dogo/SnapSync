@@ -40,6 +40,8 @@ struct DashboardView: View {
                     OverviewView(model: model)
                 case .collection:
                     CollectionView(model: model)
+                case .decks:
+                    DecksView(model: model)
                 case .settings:
                     SettingsView(model: model)
                 }

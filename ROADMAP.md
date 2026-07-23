@@ -176,13 +176,13 @@ Criteria:
 - idempotency and offline recovery;
 - native sidebar interface with dedicated overview and settings screens; ✅
 - searchable local collection browser with filters, sorting, and cached artwork; ✅
-- deck browser with card contents;
+- deck browser with card contents; ✅
 - usable diagnostics;
 - signed and notarized distribution with documented privacy.
 
 ## Next step
 
-Add the deck browser with its card contents using the normalized snapshot already loaded by the app.
+Promote the bundle to `1.0.0` and run the final signed and notarized DMG smoke test.
 
 ## Post-1.0
 

@@ -9,6 +9,7 @@ final class AppModel: ObservableObject {
     @Published private(set) var statusText = "Procurando Marvel Snap…"
     @Published private(set) var accountName = "—"
     @Published private(set) var collection: [SnapSnapshot.OwnedCard] = []
+    @Published private(set) var decks: [SnapSnapshot.Deck] = []
     @Published private(set) var cardCount = 0
     @Published private(set) var variantCount = 0
     @Published private(set) var deckCount = 0
@@ -164,6 +165,7 @@ final class AppModel: ObservableObject {
             source = nil
             accountName = "—"
             collection = []
+            decks = []
             cardCount = 0
             variantCount = 0
             deckCount = 0
@@ -187,9 +189,10 @@ final class AppModel: ObservableObject {
         self.source = source
         accountName = snapshot.account?.displayName ?? "Conta desconhecida"
         collection = snapshot.collection
+        decks = snapshot.decks.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
         cardCount = collection.count
         variantCount = collection.reduce(0) { $0 + $1.variants.count }
-        deckCount = snapshot.decks.count
+        deckCount = decks.count
         collectionLevel = snapshot.inventory.collectionLevel
         credits = snapshot.inventory.credits
         gold = snapshot.inventory.gold

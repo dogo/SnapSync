@@ -286,7 +286,7 @@ public struct SnapSnapshot: Codable, Sendable, Equatable {
         public let borderID: String?
     }
 
-    public struct Deck: Codable, Sendable, Equatable {
+    public struct Deck: Codable, Sendable, Equatable, Identifiable {
         public let id: String
         public let name: String
         public let cardDefinitionIDs: [String]

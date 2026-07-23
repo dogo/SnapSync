@@ -1,6 +1,7 @@
 enum DashboardSection: String, CaseIterable, Identifiable {
     case overview
     case collection
+    case decks
     case settings
 
     var id: Self { self }
@@ -9,6 +10,7 @@ enum DashboardSection: String, CaseIterable, Identifiable {
         switch self {
         case .overview: "Visão geral"
         case .collection: "Coleção"
+        case .decks: "Decks"
         case .settings: "Ajustes"
         }
     }
@@ -17,6 +19,7 @@ enum DashboardSection: String, CaseIterable, Identifiable {
         switch self {
         case .overview: "rectangle.grid.2x2"
         case .collection: "rectangle.stack.fill"
+        case .decks: "square.stack.3d.up.fill"
         case .settings: "gearshape"
         }
     }
