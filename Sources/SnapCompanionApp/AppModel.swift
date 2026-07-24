@@ -25,6 +25,9 @@ final class AppModel: ObservableObject {
     @Published private(set) var isLinked = false
     @Published private(set) var isSyncing = false
     @Published private(set) var hasError = false
+    @Published private(set) var match: MatchState?
+    @Published private(set) var opponentCards: [String] = []
+    @Published private(set) var isOverlayVisible = false
     @Published var automaticSyncEnabled: Bool {
         didSet {
             UserDefaults.standard.set(automaticSyncEnabled, forKey: Self.automaticSyncKey)
@@ -38,12 +41,21 @@ final class AppModel: ObservableObject {
     private var source: SnapSource?
     private var scopedURL: URL?
     private var monitorTask: Task<Void, Never>?
+    private var overlay: MatchOverlayController?
+    private var matchTimer: Timer?
+    let proxy = ProxyController()
+    private var proxyObservation: AnyCancellable?
     private let synchronizer: SnapSynchronizer
     private static let automaticSyncKey = "automaticSyncEnabled"
 
     init(synchronizer: SnapSynchronizer = SnapSynchronizer()) {
         self.synchronizer = synchronizer
         automaticSyncEnabled = UserDefaults.standard.object(forKey: Self.automaticSyncKey) as? Bool ?? true
+        // The menu observes AppModel; forward the nested proxy's changes so its
+        // status label refreshes.
+        proxyObservation = proxy.objectWillChange.sink { [weak self] _ in
+            self?.objectWillChange.send()
+        }
     }
 
     func load() {
@@ -252,6 +264,41 @@ final class AppModel: ObservableObject {
                 self?.show(error)
             }
         }
+    }
+
+    func toggleOverlay() {
+        isOverlayVisible ? hideOverlay() : showOverlay()
+    }
+
+    private func showOverlay() {
+        guard source != nil else { return }
+        refreshMatch()
+        let controller = MatchOverlayController(model: self)
+        controller.show()
+        overlay = controller
+        isOverlayVisible = true
+        matchTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.refreshMatch() }
+        }
+    }
+
+    private func hideOverlay() {
+        matchTimer?.invalidate()
+        matchTimer = nil
+        overlay?.close()
+        overlay = nil
+        isOverlayVisible = false
+    }
+
+    private func refreshMatch() {
+        if let source {
+            let latest = MatchState.read(from: source)
+            if latest != match { match = latest }
+        }
+        // Live opponent cards written by the proxy system extension.
+        let cards = (try? Data(contentsOf: URL(fileURLWithPath: "/tmp/snapcompanion-live-match.json")))
+            .flatMap { try? JSONSerialization.jsonObject(with: $0) as? [String: [String]] }?["opponentCards"] ?? []
+        if cards != opponentCards { opponentCards = cards }
     }
 
     private func openConfirmationPage(_ url: URL) throws {

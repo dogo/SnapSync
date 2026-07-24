@@ -18,8 +18,24 @@ struct MenuBarContentView: View {
             Text(.automaticSync)
         }
 
+        Button {
+            model.toggleOverlay()
+        } label: {
+            Text(model.isOverlayVisible ? .overlayHide : .overlayShow)
+        }
+        .disabled(model.canConnect == false)
+
         Button(action: openDashboard) {
             Text(.openWindow)
+        }
+
+        Divider()
+
+        // Spike: activate the transparent-proxy system extension.
+        Button {
+            model.proxy.activate()
+        } label: {
+            Text("Ativar proxy (spike): \(model.proxy.status)")
         }
 
         Divider()

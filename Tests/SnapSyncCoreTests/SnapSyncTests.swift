@@ -567,6 +567,25 @@ struct SnapSyncTests {
         #expect(missing.map(\.id) == ["Galactus"])
     }
 
+    @Test func matchStateParsesTurnCubesAndCardsIgnoringBOMAndNone() {
+        let json = """
+        {"RemoteGame":{"GameState":{"Turn":3,"TotalTurns":6,"CubeValue":2},\
+        "ClientPlayerInfo":{"CardsPlayed":["Wong","Agony"],\
+        "CardsDrawn":["Wong","None","Agony","None","BlackPanther"]}}}
+        """
+        var data = Data([0xEF, 0xBB, 0xBF]) // UTF-8 BOM prefix
+        data.append(Data(json.utf8))
+
+        let match = MatchState.parse(data)
+
+        #expect(match?.turn == 3)
+        #expect(match?.totalTurns == 6)
+        #expect(match?.cubeValue == 2)
+        #expect(match?.cardsPlayed == ["Wong", "Agony"])
+        #expect(match?.cardsDrawn == ["Wong", "Agony", "BlackPanther"])
+        #expect(MatchState.parse(Data("not json".utf8)) == nil)
+    }
+
     @Test(.tags(.networking))
     func cardCatalogFiltersAndCachesThePublicCatalog() async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
